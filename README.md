@@ -3,7 +3,7 @@
 
 ### Stuff to do 
 
-Create models 
+- Create models 
 - Create core functionality and layout utilizing the model 
 - Create a Login Page with firebase 
 - Naviagtion Between all the Pages 

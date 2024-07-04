@@ -1,13 +1,13 @@
 class QuizQuestion {
   const QuizQuestion({
     required this.text,
-    required this.answers,
-    this.isMultiChoice = false,
+    this.dropdownAnswers = const [],
+    this.textAnswer = false,
     this.subQuestions = const [],
   });
 
   final String text;
-  final List<String> answers;
-  final bool isMultiChoice;
+  final List<String> dropdownAnswers;
+  final bool textAnswer;
   final List<QuizQuestion> subQuestions;
 }

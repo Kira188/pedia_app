@@ -1,66 +1,61 @@
-// questions_data.dart
 import 'package:pedia/models/questions_model.dart';
 
 final List<QuizQuestion> questions = [
   QuizQuestion(
-    text: 'Do you stay in a hostel?',
-    answers: ['Yes', 'No'],
-  ),
-  QuizQuestion(
     text: 'Name of the Father:',
-    answers: [],
+    textAnswer: true,
   ),
   QuizQuestion(
     text: 'Name of the Mother:',
-    answers: [],
+    textAnswer: true,
   ),
   QuizQuestion(
-    text: 'Contact Number of Father:',
-    answers: [],
-  ),
-  QuizQuestion(
-    text: 'Contact Number of Mother:',
-    answers: [],
-  ),
-  QuizQuestion(
-    text: 'How many siblings do you have?',
-    answers: [],
+    text: 'Do you have siblings?',
+    dropdownAnswers: ['Yes', 'No'],
     subQuestions: [
       QuizQuestion(
         text: 'Brothers:',
-        answers: [],
+        textAnswer: true,
       ),
       QuizQuestion(
         text: 'Sisters:',
-        answers: [],
+        textAnswer: true,
       ),
     ],
   ),
   QuizQuestion(
+    text: 'Contact Number of Father:',
+    textAnswer: true,
+  ),
+  QuizQuestion(
+    text: 'Contact Number of Mother:',
+    textAnswer: true,
+  ),
+  QuizQuestion(
     text: 'Birth Order of the Child:',
-    answers: ['1st Child', '2nd Child', '>2 Children'],
+    dropdownAnswers: ['1st Child', '2nd Child', '>2 Children'],
   ),
   QuizQuestion(
     text: 'Type of the family:',
-    answers: ['Nuclear', 'Joint', 'Three – Generation'],
+    dropdownAnswers: ['Nuclear', 'Joint', 'Three – Generation'],
   ),
   QuizQuestion(
     text: 'Does anybody in the family look fat?',
-    answers: ['Yes', 'No', 'Cannot tell'],
+    dropdownAnswers: ['Yes', 'No', 'Cannot tell'],
     subQuestions: [
       QuizQuestion(
         text: 'If YES, how is he/ she related to you?',
-        answers: [],
+        textAnswer: true,
       ),
     ],
   ),
   QuizQuestion(
     text: 'Is anyone in the family suffering from diabetes?',
-    answers: ['Yes', 'No', 'Don’t know'],
+    dropdownAnswers: ['Yes', 'No', 'Don’t know'],
     subQuestions: [
       QuizQuestion(
-        text: 'If YES, please tick the following:',
-        answers: [
+        text: 'If YES, please select the following:',
+        dropdownAnswers: [
           'Both Parents suffer from Diabetes',
           'Father suffers from Diabetes',
           'Mother suffers from Diabetes',
@@ -70,11 +65,11 @@ final List<QuizQuestion> questions = [
   ),
   QuizQuestion(
     text: 'Is anyone in the family suffering from Hypertension or taking medicines for High BP?',
-    answers: ['Yes', 'No', 'Don’t know'],
+    dropdownAnswers: ['Yes', 'No', 'Don’t know'],
     subQuestions: [
       QuizQuestion(
         text: 'If YES, how is he/ she related to you?',
-        answers: [
+        dropdownAnswers: [
           'Both Parents suffer from HTN',
           'Father suffers from HTN',
           'Mother suffers from HTN',
@@ -84,11 +79,11 @@ final List<QuizQuestion> questions = [
   ),
   QuizQuestion(
     text: 'Is anybody in the family suffering from thyroid dysfunction?',
-    answers: ['Yes', 'No', 'Don’t know'],
+    dropdownAnswers: ['Yes', 'No', 'Don’t know'],
     subQuestions: [
       QuizQuestion(
         text: 'If YES, how is he/ she related to you?',
-        answers: [
+        dropdownAnswers: [
           'Both Parents suffer from Thyroid dysfunction',
           'Father suffers from Thyroid dysfunction',
           'Mother suffers from Thyroid dysfunction',

@@ -8,7 +8,7 @@ import 'package:pedia/sdc/sdc_page.dart';
 void main() {
   runApp( const MaterialApp(
     home: Scaffold(
-      body: PhysicalHabits(),
+      body: QuestionsScreen(),
     ),
   ));
 }

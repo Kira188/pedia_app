@@ -1,4 +1,4 @@
-import 'package:pedia/models/eating_data.dart';
+import 'package:pedia/models/eating_model.dart';
 
 const List<String> frequencyOptions = [
   'Never',

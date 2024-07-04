@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/eating/eating_choice.dart';
-import 'package:pedia/models/eating_data.dart';
+import 'package:pedia/models/eating_model.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/eating/eating_result.dart';
 
@@ -14,7 +14,7 @@ class EatingHabits extends StatefulWidget {
 }
 
 class _EatingHabitsState extends State<EatingHabits> {
-  EatingData eatingData = EatingData();
+  EatingModel eatingData = EatingModel();
 
   void _openChoiceOverlay(Category category) async {
     final result = await showModalBottomSheet<Map<int, String>>(
@@ -40,7 +40,7 @@ class _EatingHabitsState extends State<EatingHabits> {
   bool _allCategoriesSelected() {
     for (var category in Category.values) {
       if (!eatingData.choices.containsKey(category) ||
-          eatingData.choices[category]!.values.any((frequency) => frequency == null)) {
+          eatingData.choices[category]!.values.any((frequency) => false)) {
         return false;
       }
     }

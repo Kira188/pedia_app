@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pedia/models/eating_data.dart';
+import 'package:pedia/models/eating_model.dart';
 import 'package:pedia/data/eating_options.dart'; // Import the new file
 
 class EatingChoice extends StatefulWidget {

@@ -1,10 +1,10 @@
-class SdcData {
+class SdcModel {
   double weight;
   double height;
   DateTime age;
   String gender;
 
-  SdcData({
+  SdcModel({
     required this.weight,
     required this.height,
     required this.age,

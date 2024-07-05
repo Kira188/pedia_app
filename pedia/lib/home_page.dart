@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pedia/container_one.dart';
 import 'package:pedia/gradient_scaffold.dart';
+import 'package:pedia/sdc/sdc_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,84 +8,99 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GradientScaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "lib/assets/aher-logo.jpeg",
-                  width: 100,
-                ),
-                Image.asset(
-                  "lib/assets/jss logo.jpg",
-                  width: 100,
-                ),
-              ],
-            ),
-          ),
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: Text(
-                "Pedia Predict",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
+      showBackButton: false, // Turn off back button
+      appBarText: "Pedia Predict",
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    const SizedBox(height: 50),
                     InkWell(
-                      onTap: () {},
-                      child: const ContainerOne(
-                        text1: "1",
-                        text2: "Socio Demographic Characteristics",
+                      onTap: () {
+                        debugPrint("New Student Add Tap");
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return const SdcPage();
+                        }));
+                      },
+                      child: Card(
+                        color: const Color.fromARGB(255, 238, 198, 150),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 5,
+                        child: const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Center(
+                            child: Text(
+                              "Add New Student",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 50),
                     InkWell(
                       onTap: () {},
-                      child: const ContainerOne(
-                        text1: "2",
-                        text2: "Eating Habits",
+                      child: Card(
+                        color: const Color.fromARGB(255, 238, 198, 150),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 5,
+                        child: const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Center(
+                            child: Text(
+                              "Export to Excel",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 50),
                     InkWell(
                       onTap: () {},
-                      child: const ContainerOne(
-                        text1: "3",
-                        text2: "Physical Activity And Sedentary Lifestyle",
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    InkWell(
-                      onTap: () {},
-                      child: const ContainerOne(
-                        text1: "4",
-                        text2: "Mental Health And Well Being",
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    InkWell(
-                      onTap: () {},
-                      child: const ContainerOne(
-                        text1: "5",
-                        text2: "Sleep Quality",
+                      child: Card(
+                        color: const Color.fromARGB(255, 238, 198, 150),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 5,
+                        child: const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Center(
+                            child: Text(
+                              "Delete Previous Student",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

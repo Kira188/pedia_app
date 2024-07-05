@@ -12,7 +12,7 @@ enum Category {
 
 const List<String> frequencyOptions = [
   'Never',
-  '1 day',
+  '1 day'
   '2 days',
   '3 days',
   '4 days',

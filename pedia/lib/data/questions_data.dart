@@ -1,15 +1,15 @@
 import 'package:pedia/models/questions_model.dart';
 
 final List<QuizQuestion> questions = [
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Name of the Father:',
     textAnswer: true,
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Name of the Mother:',
     textAnswer: true,
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Do you have siblings?',
     dropdownAnswers: ['Yes', 'No'],
     subQuestions: [
@@ -23,23 +23,23 @@ final List<QuizQuestion> questions = [
       ),
     ],
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Contact Number of Father:',
     textAnswer: true,
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Contact Number of Mother:',
     textAnswer: true,
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Birth Order of the Child:',
     dropdownAnswers: ['1st Child', '2nd Child', '>2 Children'],
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Type of the family:',
-    dropdownAnswers: ['Nuclear', 'Joint', 'Three – Generation'],
+    dropdownAnswers: ['Nuclear', 'Joint', 'Three  Generation'],
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Does anybody in the family look fat?',
     dropdownAnswers: ['Yes', 'No', 'Cannot tell'],
     subQuestions: [
@@ -49,7 +49,7 @@ final List<QuizQuestion> questions = [
       ),
     ],
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Is anyone in the family suffering from diabetes?',
     dropdownAnswers: ['Yes', 'No', 'Don’t know'],
     subQuestions: [
@@ -63,8 +63,9 @@ final List<QuizQuestion> questions = [
       ),
     ],
   ),
-  QuizQuestion(
-    text: 'Is anyone in the family suffering from Hypertension or taking medicines for High BP?',
+  const QuizQuestion(
+    text:
+        'Is anyone in the family suffering from Hypertension or taking medicines for High BP?',
     dropdownAnswers: ['Yes', 'No', 'Don’t know'],
     subQuestions: [
       QuizQuestion(
@@ -77,9 +78,9 @@ final List<QuizQuestion> questions = [
       ),
     ],
   ),
-  QuizQuestion(
+  const QuizQuestion(
     text: 'Is anybody in the family suffering from thyroid dysfunction?',
-    dropdownAnswers: ['Yes', 'No', 'Don’t know'],
+    dropdownAnswers: ['Yes', 'No', 'Dont know'],
     subQuestions: [
       QuizQuestion(
         text: 'If YES, how is he/ she related to you?',

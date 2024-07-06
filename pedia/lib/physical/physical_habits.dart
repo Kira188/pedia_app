@@ -62,39 +62,6 @@ class _PhysicalHabitsState extends State<PhysicalHabits> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "lib/assets/aher-logo.jpeg",
-                  width: 80,
-                ),
-                Image.asset(
-                  "lib/assets/jss logo.jpg",
-                  width: 80,
-                ),
-              ],
-            ),
-          ),
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 0),
-              child: Text(
-                "Pedia Predict",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              "Physical Habits",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),

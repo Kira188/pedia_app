@@ -152,7 +152,7 @@ class _SdcPageState extends State<SdcPage> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close dialog
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const QuestionsScreen();
+                  return const QuestionsScreen(startIndex: 0,endIndex: 2,);
                 }));
               },
             ),

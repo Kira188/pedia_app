@@ -4,12 +4,13 @@ import 'package:pedia/models/questions_model.dart';
 import 'package:pedia/gradient_scaffold.dart'; // Assuming GradientScaffold is defined in this file
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({super.key});
+  final int startIndex;
+  final int endIndex;
+
+  const QuestionsScreen({super.key, required this.startIndex, required this.endIndex});
 
   @override
-  State<StatefulWidget> createState() =>
-   _QuestionsScreenState();
-  
+  State<StatefulWidget> createState() => _QuestionsScreenState();
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
@@ -102,11 +103,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: questions.length,
+                itemCount: widget.endIndex - widget.startIndex + 1,
                 itemBuilder: (context, index) {
+                  final question = questions[widget.startIndex + index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: buildQuestion(questions[index], ''),
+                    child: buildQuestion(question, ''),
                   );
                 },
               ),

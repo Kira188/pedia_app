@@ -10,6 +10,7 @@ enum Category {
   beverages,
   others,
 }
+
 const List<String> categoryNames = [
   'Cereals',
   'Pulses and Legumes',
@@ -25,6 +26,8 @@ const List<String> categoryNames = [
 
 class EatingModel {
   Map<Category, Map<int, String>> choices = {};
+
+  Set<Category> get categoriesWithTextInput => {Category.others};
 
   EatingModel();
 

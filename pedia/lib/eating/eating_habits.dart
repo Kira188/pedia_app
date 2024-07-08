@@ -3,9 +3,13 @@ import 'package:pedia/eating/eating_choice.dart';
 import 'package:pedia/models/eating_model.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/eating/eating_result.dart';
+import 'package:pedia/database_helper.dart';
+import 'package:pedia/data/eating_options.dart';
 
 class EatingHabits extends StatefulWidget {
-  const EatingHabits({super.key});
+  final DatabaseHelper dbHelper;
+
+  const EatingHabits({Key? key, required this.dbHelper}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -27,35 +31,33 @@ class _EatingHabitsState extends State<EatingHabits> {
       setState(() {
         eatingData.choices[category] = result;
       });
-      debugPrint('Selected Options for ${categoryNames[category.index]}: $result');
-
-      // Check if all categories have been selected
-      if (_allCategoriesSelected()) {
-        // All categories are selected, perform action here
-        _showEatingResultScreen();
-      }
+      debugPrint(
+          'Selected Options for ${categoryNames[category.index]}: $result');
     }
   }
 
-  bool _allCategoriesSelected() {
-    for (var category in Category.values) {
-      if (!eatingData.choices.containsKey(category) ||
-          eatingData.choices[category]!.values.any((frequency) => false)) {
-        return false;
+  Future<void> _saveEatingHabits() async {
+    int latestSdcId = await widget.dbHelper.getLatestSdcId();
+
+    for (var entry in eatingData.choices.entries) {
+      for (var subEntry in entry.value.entries) {
+        String question =
+            '${categoryNames[entry.key.index]} - ${eatingOptions[entry.key]![subEntry.key]}';
+        String answer = subEntry.value;
+        await widget.dbHelper.insertEatingHabit(latestSdcId, question, answer);
       }
     }
-    return true;
   }
 
   void _showEatingResultScreen() {
-    // Calculate total score here if needed
     int totalScore = eatingData.calculatedEatingScore;
-
-    // Navigate to the EatingResult screen with calculated score
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EatingResult(eatingScore: totalScore),
+        builder: (context) => EatingResult(
+          eatingScore: totalScore,
+          dbHelper: widget.dbHelper,
+        ),
       ),
     );
   }
@@ -66,39 +68,6 @@ class _EatingHabitsState extends State<EatingHabits> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "lib/assets/aher-logo.jpeg",
-                  width: 80,
-                ),
-                Image.asset(
-                  "lib/assets/jss logo.jpg",
-                  width: 80,
-                ),
-              ],
-            ),
-          ),
-          const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 0),
-              child: Text(
-                "Pedia Predict",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              "Eating Habits",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 3, 16, 3),
@@ -116,14 +85,18 @@ class _EatingHabitsState extends State<EatingHabits> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
-                        color: eatingData.choices[category] != null ? Colors.green : Colors.red,
+                        color: eatingData.choices[category] != null
+                            ? Colors.green
+                            : Colors.red,
                         elevation: 4,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Center(
                             child: Text(
                               categoryNames[index],
-                              style: const TextStyle(color: Colors.white), // To ensure text is readable on both red and green background
+                              style: const TextStyle(
+                                  color: Colors
+                                      .white), // To ensure text is readable on both red and green background
                             ),
                           ),
                         ),
@@ -133,6 +106,13 @@ class _EatingHabitsState extends State<EatingHabits> {
                 },
               ),
             ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await _saveEatingHabits();
+              _showEatingResultScreen();
+            },
+            child: const Text('Submit'),
           ),
         ],
       ),

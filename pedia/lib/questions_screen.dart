@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/data/questions_data.dart';
+import 'package:pedia/home_page.dart';
 import 'package:pedia/models/questions_model.dart';
-import 'package:pedia/gradient_scaffold.dart'; // Assuming GradientScaffold is defined in this file
+import 'package:pedia/gradient_scaffold.dart';
+import 'package:pedia/database_helper.dart';
+import 'package:pedia/eating/eating_habits.dart';
+import 'package:pedia/psss/psss_habits.dart';
 
 class QuestionsScreen extends StatefulWidget {
   final int startIndex;
   final int endIndex;
+  final DatabaseHelper dbHelper;
 
-  const QuestionsScreen({super.key, required this.startIndex, required this.endIndex});
+  const QuestionsScreen({
+    super.key,
+    required this.startIndex,
+    required this.endIndex,
+    required this.dbHelper,
+  });
 
   @override
   State<StatefulWidget> createState() => _QuestionsScreenState();
@@ -16,10 +26,23 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   final Map<String, String> textAnswers = {};
   final Map<String, String> dropdownAnswers = {};
+  final Set<String> expandedQuestions = {};
 
-  void handleDropdownAnswerChange(String questionKey, String answer) {
+  @override
+  void initState() {
+    super.initState();
+    textAnswers.clear();
+    dropdownAnswers.clear();
+  }
+
+  void handleDropdownAnswerChange(String questionKey, String? answer) {
     setState(() {
-      dropdownAnswers[questionKey] = answer;
+      dropdownAnswers[questionKey] = answer!;
+      if (answer == 'Yes') {
+        expandedQuestions.add(questionKey);
+      } else {
+        expandedQuestions.remove(questionKey);
+      }
     });
   }
 
@@ -29,16 +52,19 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     });
   }
 
-  void showAllAnswers() {
-    debugPrint('Text Field Answers:');
-    textAnswers.forEach((questionKey, answer) {
-      debugPrint('$questionKey: $answer');
-    });
+  Future<void> saveAnswers() async {
+    int latestSdcId = await widget.dbHelper.getLatestSdcId();
 
-    debugPrint('\nDropdown Answers:');
-    dropdownAnswers.forEach((questionKey, answer) {
-      debugPrint('$questionKey: $answer');
-    });
+    for (var entry in textAnswers.entries) {
+      await widget.dbHelper.insertSdcQuestion(latestSdcId, entry.key, entry.value);
+    }
+
+    for (var entry in dropdownAnswers.entries) {
+      await widget.dbHelper.insertSdcQuestion(latestSdcId, entry.key, entry.value);
+    }
+
+    textAnswers.clear();
+    dropdownAnswers.clear();
   }
 
   Widget buildQuestion(QuizQuestion question, String parentKey) {
@@ -62,7 +88,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               value: dropdownAnswers[questionKey],
               hint: const Text('Select an option'),
               onChanged: (value) {
-                handleDropdownAnswerChange(questionKey, value!);
+                handleDropdownAnswerChange(questionKey, value);
               },
               items: question.dropdownAnswers.map((answer) {
                 return DropdownMenuItem(
@@ -82,13 +108,13 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             ),
           ),
         ],
-        if (question.subQuestions.isNotEmpty && dropdownAnswers[questionKey] == 'Yes')
+        if (question.subQuestions.isNotEmpty && expandedQuestions.contains(questionKey)) 
           ...question.subQuestions.map((subQuestion) {
             return Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 8.0),
               child: buildQuestion(subQuestion, questionKey),
             );
-          }),
+          }).toList(),
       ],
     );
   }
@@ -116,8 +142,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             const SizedBox(height: 16.0),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  showAllAnswers();
+                onPressed: () async {
+                  await saveAnswers();
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -128,7 +154,24 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                           TextButton(
                             child: const Text('OK'),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    if (widget.startIndex == 0) {
+                                      return EatingHabits(dbHelper: widget.dbHelper);
+                                    } else if (widget.startIndex == 11) {
+                                      return PsssHabits(habitType: 0, dbHelper: widget.dbHelper);
+                                    } else if(widget.startIndex == 15){
+                                      return PsssHabits(habitType: 2, dbHelper: widget.dbHelper);
+                                    } else if(widget.startIndex == 18){
+                                      return PsssHabits(habitType: 3, dbHelper: widget.dbHelper);
+                                    } else {
+                                      return HomePage(dbHelper: widget.dbHelper);
+                                    }
+                                  },
+                                ),
+                              );
                             },
                           ),
                         ],

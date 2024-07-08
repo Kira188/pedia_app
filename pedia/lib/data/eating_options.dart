@@ -40,6 +40,7 @@ const Map<Category, List<String>> eatingOptions = {
     'Grapes',
     'Sapota',
     'Banana',
+    'Pomegranate',
     'Pineapple',
     'Guava',
     'Papaya',
@@ -97,5 +98,10 @@ const Map<Category, List<String>> eatingOptions = {
     'Soft drinks e.g. Sprite, Coke, Pepsi',
     'Energy drink (Tang, Pediasure, glucon D etc.,)',
     'Hot chocolate',
+  ],
+  Category.others: [
+    'Food 1',
+    'Food 2',
+    'Food 3',
   ],
 };

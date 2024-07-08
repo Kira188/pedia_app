@@ -1,5 +1,5 @@
 // // utils/id_manager.dart
-// import 'package:pedia/utils/database_helper.dart';
+// import 'package:pedia/database_helper.dart';
 
 // class IDManager {
 //   static int _currentId = 0;

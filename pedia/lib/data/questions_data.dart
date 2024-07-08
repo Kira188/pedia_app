@@ -37,7 +37,7 @@ final List<QuizQuestion> questions = [
   ),
   const QuizQuestion(
     text: 'Type of the family:',
-    dropdownAnswers: ['Nuclear', 'Joint', 'Three  Generation'],
+    dropdownAnswers: ['Nuclear', 'Joint', 'Three Generation'],
   ),
   const QuizQuestion(
     text: 'Does anybody in the family look fat?',
@@ -80,7 +80,7 @@ final List<QuizQuestion> questions = [
   ),
   const QuizQuestion(
     text: 'Is anybody in the family suffering from thyroid dysfunction?',
-    dropdownAnswers: ['Yes', 'No', 'Dont know'],
+    dropdownAnswers: ['Yes', 'No', 'Don’t know'],
     subQuestions: [
       QuizQuestion(
         text: 'If YES, how is he/ she related to you?',
@@ -91,5 +91,67 @@ final List<QuizQuestion> questions = [
         ],
       ),
     ],
+  ),
+  // Additional Questions
+  const QuizQuestion(
+    text: 'How many days per week do you have Physical Training (PT) classes at school/college?',
+    dropdownAnswers: [
+      '0 Day / No Classes',
+      '1 Day',
+      '2 days',
+      '3 days',
+      '4 days',
+      '5 days',
+      '6 days'
+    ],
+  ),
+  const QuizQuestion(
+    text: 'If you have PT, on average, how long is each PT/PE period? ______minutes per class',
+    textAnswer: true,
+  ),
+  const QuizQuestion(
+    text: 'Do you play/ participate/ take part in PT/PE classes?',
+    dropdownAnswers: ['Yes', 'No'],
+    subQuestions: [
+      QuizQuestion(
+        text: 'If Yes, what types of games do you play?',
+        dropdownAnswers: ['Indoor games', 'Outdoor games'],
+      ),
+    ],
+  ),
+  const QuizQuestion(
+    text: 'Are you involved in any of the following activities in your school/college?',
+    dropdownAnswers: ['Scouts and Guides', 'NCC', 'Others, Specify'],
+    textAnswer: true, // To allow user to specify 'Others'
+  ),
+  const QuizQuestion(
+    text: 'How do you describe your weight?',
+    dropdownAnswers: [
+      'Very underweight',
+      'Slightly underweight',
+      'About the right weight',
+      'Slightly overweight',
+      'Very overweight'
+    ],
+  ),
+  const QuizQuestion(
+    text: 'Which of the following are you trying to do about your weight?',
+    dropdownAnswers: [
+      'Lose weight',
+      'Gain weight',
+      'Stay the same weight'
+    ],
+  ),
+  const QuizQuestion(
+    text: 'Are you being bullied for weight by your friends or family?',
+    dropdownAnswers: ['Yes', 'No'],
+  ),
+  const QuizQuestion(
+    text: 'At what time do you usually go to bed?',
+    textAnswer: true,
+  ),
+  const QuizQuestion(
+    text: 'What is the usual time of getting up from the bed?',
+    textAnswer: true,
   ),
 ];

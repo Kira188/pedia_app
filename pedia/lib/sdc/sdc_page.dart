@@ -3,11 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/models/sdc_model.dart';
 import 'package:pedia/data/sdc_data.dart';
-
+import 'package:pedia/database_helper.dart';
 import 'package:pedia/questions_screen.dart';
 
 class SdcPage extends StatefulWidget {
-  const SdcPage({super.key});
+  final DatabaseHelper dbHelper;
+
+  const SdcPage({Key? key, required this.dbHelper}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,6 +30,12 @@ class _SdcPageState extends State<SdcPage> {
   DateTime? _selectedDate;
   final List<SdcModel> _sdcDataList = [];
 
+  @override
+  void initState() {
+    super.initState();
+    
+  }
+
   int _calculateAgeInMonths(DateTime birthDate, DateTime currentDate) {
     int years = currentDate.year - birthDate.year;
     int months = currentDate.month - birthDate.month;
@@ -36,28 +44,12 @@ class _SdcPageState extends State<SdcPage> {
       months += 12;
     }
 
-    // Calculate the fraction of the current month that has passed
     double dayFraction = (currentDate.day - birthDate.day) / 30.0;
 
-    // Add the day fraction to the total months and floor the result
     return (years * 12 + months + dayFraction).floor();
   }
 
-  void _printFormData(SdcModel sdcData) {
-    debugPrint('School Name: ${sdcData.schoolName}');
-    debugPrint('Full Name: ${sdcData.fullName}');
-    debugPrint('Class and Section: ${sdcData.classSection}');
-    debugPrint('Address: ${sdcData.address}');
-    debugPrint('Weight (kg): ${sdcData.weight}');
-    debugPrint('Height (m): ${sdcData.height}');
-    debugPrint('Birthday: ${sdcData.age}');
-    debugPrint('Gender: ${sdcData.gender}');
-    debugPrint('BMI: ${sdcData.bmi.toStringAsFixed(2)}');
-    debugPrint('Risk Category: ${sdcData.riskFactor}');
-  }
-
-  String _calculateRisk(
-      String gender, DateTime birthDate, DateTime currentDate, double bmi) {
+  String _calculateRisk(String gender, DateTime birthDate, DateTime currentDate, double bmi) {
     int ageInMonths = _calculateAgeInMonths(birthDate, currentDate);
     debugPrint("Age in Months is $ageInMonths");
     Map<int, List<double>> genderMap;
@@ -77,10 +69,8 @@ class _SdcPageState extends State<SdcPage> {
     List<double>? sdValues = genderMap[ageInMonths];
     if (sdValues != null) {
       if (bmi > sdValues[6]) {
-        // Check if BMI is greater than +2 SD
         return 'Obese';
       } else if (bmi <= sdValues[5] && bmi > 0) {
-        // Check if BMI is less than or equal to +1 SD
         return 'Not Obese';
       } else {
         return 'Cannot Handle BMI';
@@ -90,9 +80,9 @@ class _SdcPageState extends State<SdcPage> {
     }
   }
 
-  void _addSdcData() {
+  void _addSdcData() async {
     if (!_formKey.currentState!.validate()) {
-      return; // Return if the form is not valid
+      return;
     }
 
     final weight = double.parse(_weightController.text);
@@ -125,7 +115,8 @@ class _SdcPageState extends State<SdcPage> {
       _sdcDataList.add(sdcData);
     });
 
-    // Clear the form
+    await widget.dbHelper.insertSdcModel(sdcData);
+
     _weightController.clear();
     _heightController.clear();
     _ageController.clear();
@@ -134,11 +125,10 @@ class _SdcPageState extends State<SdcPage> {
     _classSectionController.clear();
     _addressController.clear();
     setState(() {
-      _gender = null; // Reset gender to null
-      _selectedDate = null; // Reset date
+      _gender = null;
+      _selectedDate = null;
     });
 
-    // Show a dialog to confirm the data has been added
     showDialog(
       context: context,
       builder: (context) {
@@ -150,9 +140,10 @@ class _SdcPageState extends State<SdcPage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop();
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const QuestionsScreen(startIndex: 0,endIndex: 2,);
+                  return QuestionsScreen(
+                    startIndex: 0, endIndex: 10, dbHelper: widget.dbHelper);
                 }));
               },
             ),
@@ -160,9 +151,6 @@ class _SdcPageState extends State<SdcPage> {
         );
       },
     );
-
-    // Print the form data to the console
-    _printFormData(sdcData);
   }
 
   void _presentDatepicker() async {
@@ -199,112 +187,96 @@ class _SdcPageState extends State<SdcPage> {
   Widget build(BuildContext context) {
     return GradientScaffold(
       appBarText: "SDC Page",
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        _buildTextField(_schoolNameController,
-                            'Name of the School', TextInputType.text),
-                        _buildTextField(_fullNameController, 'Full Name',
-                            TextInputType.text),
-                        _buildTextField(_classSectionController,
-                            'Class and Section', TextInputType.text),
-                        _buildTextField(
-                            _addressController, 'Address', TextInputType.text),
-                        _buildTextField(_weightController, 'Weight (kg)',
-                            TextInputType.number),
-                        _buildTextField(_heightController, 'Height (m)',
-                            TextInputType.number),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _ageController,
-                                decoration: const InputDecoration(
-                                  labelText: 'Birthday (yyyy-mm-dd)',
-                                ),
-                                readOnly: true,
-                                onTap: _presentDatepicker,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your Birthday';
-                                  }
-                                  return null;
-                                },
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      _buildTextField(_schoolNameController, 'Name of the School', TextInputType.text),
+                      _buildTextField(_fullNameController, 'Full Name', TextInputType.text),
+                      _buildTextField(_classSectionController, 'Class and Section', TextInputType.text),
+                      _buildTextField(_addressController, 'Address', TextInputType.text),
+                      _buildTextField(_weightController, 'Weight (kg)', TextInputType.number),
+                      _buildTextField(_heightController, 'Height (m)', TextInputType.number),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _ageController,
+                              decoration: const InputDecoration(
+                                labelText: 'Birthday (yyyy-mm-dd)',
                               ),
+                              readOnly: true,
+                              onTap: _presentDatepicker,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your birthday';
+                                }
+                                return null;
+                              },
                             ),
-                            IconButton(
-                              onPressed: _presentDatepicker,
-                              icon: const Icon(Icons.calendar_today),
-                            ),
-                          ],
-                        ),
-                        DropdownButtonFormField<String>(
-                          value: _gender,
-                          items: ['Male', 'Female'].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _gender = newValue!;
-                            });
-                          },
-                          decoration:
-                              const InputDecoration(labelText: 'Gender'),
-                          validator: (value) => value == null
-                              ? 'Please select your Gender'
-                              : null,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _addSdcData();
-                            }
-                          },
-                          child: const Text('Submit'),
-                        ),
-                      ],
-                    ),
+                          ),
+                          IconButton(
+                            onPressed: _presentDatepicker,
+                            icon: const Icon(Icons.calendar_today),
+                          ),
+                        ],
+                      ),
+                      DropdownButtonFormField(
+                        value: _gender,
+                        hint: const Text('Select Gender'),
+                        items: ['Male', 'Female'].map((String value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _gender = newValue;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select your gender';
+                          }
+                          return null;
+                        },
+                      ),
+                      ElevatedButton(
+                        onPressed: _addSdcData,
+                        child: const Text('Submit'),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String labelText,
-      TextInputType keyboardType,
-      {bool validateDate = false}) {
+  Widget _buildTextField(TextEditingController controller, String labelText, TextInputType keyboardType) {
     return TextFormField(
       controller: controller,
-      decoration: InputDecoration(labelText: labelText),
       keyboardType: keyboardType,
+      decoration: InputDecoration(
+        labelText: labelText,
+      ),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter your $labelText';
-        }
-        if (validateDate) {
-          try {
-            DateFormat('yyyy-MM-dd').parse(value);
-          } catch (_) {
-            return 'Please enter a valid date (yyyy-mm-dd)';
-          }
         }
         return null;
       },

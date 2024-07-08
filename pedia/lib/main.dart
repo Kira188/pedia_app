@@ -1,18 +1,47 @@
-import 'package:pedia/eating/eating_habits.dart';
-import 'package:pedia/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:pedia/physical/physical_habits.dart';
-import 'package:pedia/questions_screen.dart';
-import 'package:pedia/sdc/sdc_page.dart';
-import 'package:pedia/sedentary/sedentary_habits.dart';
-import 'package:pedia/sedentarytwo/sedentary_habits_two.dart';
-import 'package:pedia/sleeping/sleeping_habits.dart';
-
+import 'package:pedia/home_page.dart';
+import 'package:pedia/database_helper.dart';
 
 void main() {
-  runApp( const MaterialApp(
-    home: Scaffold(
-      body: QuestionsScreen(startIndex: 0,endIndex: 2,),
-    ),
-  ));
+  runApp(const MyApp());
 }
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final DatabaseHelper dbHelper = DatabaseHelper();
+
+    return MaterialApp(
+      title: 'Pedia Predict',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(dbHelper: dbHelper),
+    );
+  }
+}
+/*
+import 'package:flutter/material.dart';
+import 'package:pedia/psss/psss_habits.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Pedia Predict',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const PsssHabits(habitType: 3), // You can change the habitType here
+    );
+  }
+}
+*/

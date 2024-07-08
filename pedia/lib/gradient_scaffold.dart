@@ -36,7 +36,8 @@ class GradientScaffold extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -56,7 +57,8 @@ class GradientScaffold extends StatelessWidget {
                       child: Center(
                         child: Text(
                           appBarText,
-                          style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

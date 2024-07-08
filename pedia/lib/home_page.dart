@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/sdc/sdc_page.dart';
+import 'package:pedia/database_helper.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final DatabaseHelper dbHelper;
+
+  const HomePage({super.key, required this.dbHelper});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +25,9 @@ class HomePage extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         debugPrint("New Student Add Tap");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return const SdcPage();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return SdcPage(dbHelper: dbHelper);
                         }));
                       },
                       child: Card(
@@ -49,7 +53,10 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
                     InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        debugPrint("Export to Excel Tap");
+                         await DatabaseHelper().exportDatabaseToExcel();
+                      },
                       child: Card(
                         color: const Color.fromARGB(255, 238, 198, 150),
                         shape: RoundedRectangleBorder(

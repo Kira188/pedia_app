@@ -52,7 +52,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
     });
   }
 
-  Future<void> saveAnswers() async {
+  Future<void> saveAnswers(BuildContext context) async {
     int latestSdcId = await widget.dbHelper.getLatestSdcId();
 
     for (var entry in textAnswers.entries) {
@@ -61,6 +61,43 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
     for (var entry in dropdownAnswers.entries) {
       await widget.dbHelper.insertSdcQuestion(latestSdcId, entry.key, entry.value);
+    }
+
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Success'),
+            content: const Text('Data has been saved successfully!'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        if (widget.startIndex == 0) {
+                          return EatingHabits(dbHelper: widget.dbHelper);
+                        } else if (widget.startIndex == 11) {
+                          return PsssHabits(habitType: 0, dbHelper: widget.dbHelper);
+                        } else if (widget.startIndex == 15) {
+                          return PsssHabits(habitType: 2, dbHelper: widget.dbHelper);
+                        } else if (widget.startIndex == 18) {
+                          return PsssHabits(habitType: 3, dbHelper: widget.dbHelper);
+                        } else {
+                          return HomePage(dbHelper: widget.dbHelper);
+                        }
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     textAnswers.clear();
@@ -108,7 +145,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             ),
           ),
         ],
-        if (question.subQuestions.isNotEmpty && expandedQuestions.contains(questionKey)) 
+        if (question.subQuestions.isNotEmpty && expandedQuestions.contains(questionKey))
           ...question.subQuestions.map((subQuestion) {
             return Padding(
               padding: const EdgeInsets.only(left: 16.0, top: 8.0),
@@ -123,67 +160,48 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   Widget build(BuildContext context) {
     return GradientScaffold(
       appBarText: 'SDQ Page',
-      body: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.endIndex - widget.startIndex + 1,
-                itemBuilder: (context, index) {
-                  final question = questions[widget.startIndex + index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: buildQuestion(question, ''),
-                  );
-                },
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: widget.endIndex - widget.startIndex + 1,
+                      itemBuilder: (context, index) {
+                        final question = questions.length > widget.startIndex + index
+                            ? questions[widget.startIndex + index]
+                            : null;
+                        return question != null
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: buildQuestion(question, ''),
+                              )
+                            : Container(); // Return empty container if index exceeds questions length
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 16.0),
-            Center(
+          ),
+          Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
               child: ElevatedButton(
                 onPressed: () async {
-                  await saveAnswers();
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Success'),
-                        content: const Text('Data has been saved successfully!'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('OK'),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    if (widget.startIndex == 0) {
-                                      return EatingHabits(dbHelper: widget.dbHelper);
-                                    } else if (widget.startIndex == 11) {
-                                      return PsssHabits(habitType: 0, dbHelper: widget.dbHelper);
-                                    } else if(widget.startIndex == 15){
-                                      return PsssHabits(habitType: 2, dbHelper: widget.dbHelper);
-                                    } else if(widget.startIndex == 18){
-                                      return PsssHabits(habitType: 3, dbHelper: widget.dbHelper);
-                                    } else {
-                                      return HomePage(dbHelper: widget.dbHelper);
-                                    }
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  await saveAnswers(context);
                 },
                 child: const Text('Submit'),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

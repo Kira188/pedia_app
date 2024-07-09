@@ -252,9 +252,12 @@ class _SdcPageState extends State<SdcPage> {
                           return null;
                         },
                       ),
-                      ElevatedButton(
-                        onPressed: _addSdcData,
-                        child: const Text('Submit'),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: _addSdcData,
+                          child: const Text('Submit'),
+                        ),
                       ),
                     ],
                   ),

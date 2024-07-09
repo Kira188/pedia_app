@@ -7,7 +7,8 @@ class EatingResult extends StatelessWidget {
   final int eatingScore;
   final DatabaseHelper dbHelper;
 
-  const EatingResult({super.key, required this.eatingScore, required this.dbHelper});
+  const EatingResult(
+      {super.key, required this.eatingScore, required this.dbHelper});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +19,18 @@ class EatingResult extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Your Eating Score is: $eatingScore",
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                "Your Eating Score is: $eatingScore",
+                style: const TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            const SizedBox(height: 50),
-            InkWell(
-              onTap: () {
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return QuestionsScreen(
                     startIndex: 11,
@@ -36,24 +39,12 @@ class EatingResult extends StatelessWidget {
                   );
                 }));
               },
-              child: Card(
-                color: const Color.fromARGB(255, 238, 198, 150),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                elevation: 5,
-                child: const Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Center(
-                    child: Text(
-                      "OK",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+              child: const Text(
+                "OK",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

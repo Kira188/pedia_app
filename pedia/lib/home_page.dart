@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pedia/delete_student.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/sdc/sdc_page.dart';
 import 'package:pedia/database_helper.dart';
@@ -55,7 +56,28 @@ class HomePage extends StatelessWidget {
                     InkWell(
                       onTap: () async {
                         debugPrint("Export to Excel Tap");
-                         await DatabaseHelper().exportDatabaseToExcel();
+                        await DatabaseHelper().exportDatabaseToExcel();
+
+                        if (context.mounted) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Export Complete"),
+                                content: const Text(
+                                    "Data has been successfully exported to Excel."),
+                                actions: [
+                                  TextButton(
+                                    child: const Text("OK"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
                       child: Card(
                         color: const Color.fromARGB(255, 238, 198, 150),
@@ -80,7 +102,13 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 50),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DeleteStudent(dbHelper: dbHelper)));
+                      },
                       child: Card(
                         color: const Color.fromARGB(255, 238, 198, 150),
                         shape: RoundedRectangleBorder(
@@ -91,7 +119,7 @@ class HomePage extends StatelessWidget {
                           padding: EdgeInsets.all(20.0),
                           child: Center(
                             child: Text(
-                              "Delete Previous Student",
+                              "Show/Delete Students",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,

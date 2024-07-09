@@ -9,7 +9,7 @@ import 'package:pedia/data/eating_options.dart';
 class EatingHabits extends StatefulWidget {
   final DatabaseHelper dbHelper;
 
-  const EatingHabits({Key? key, required this.dbHelper}) : super(key: key);
+  const EatingHabits({super.key, required this.dbHelper});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,6 +22,7 @@ class _EatingHabitsState extends State<EatingHabits> {
 
   void _openChoiceOverlay(Category category) async {
     final result = await showModalBottomSheet<Map<int, String>>(
+      backgroundColor: const Color.fromARGB(255, 247, 227, 203),
       context: context,
       isScrollControlled: true,
       builder: (ctx) => EatingChoice(category: category),
@@ -107,12 +108,15 @@ class _EatingHabitsState extends State<EatingHabits> {
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              await _saveEatingHabits();
-              _showEatingResultScreen();
-            },
-            child: const Text('Submit'),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                await _saveEatingHabits();
+                _showEatingResultScreen();
+              },
+              child: const Text('Submit'),
+            ),
           ),
         ],
       ),

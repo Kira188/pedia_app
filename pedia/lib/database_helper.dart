@@ -75,8 +75,81 @@ class DatabaseHelper {
       )
     ''');
   }
+// CODE FOR INSERTING THAT DIDNT WORK
+//   Future<int> insertSdcModel(SdcModel sdcModel) async {
+//     Database db = await database;
 
-  Future<int> insertSdcModel(SdcModel sdcModel) async {
+//     // Check if the student ID already exists using MAX
+//     if (sdcModel.id != null) {
+//       int? maxId = Sqflite.firstIntValue(await db.rawQuery(
+//               'SELECT MAX(id) FROM student WHERE id = ?', [sdcModel.id]));
+//       if (maxId != null) {
+//         await deleteStudentById(sdcModel.id!);
+//       }
+//     }
+
+//     return await db.insert(
+//       'student',
+//       sdcModel.toMap(),
+//       conflictAlgorithm: ConflictAlgorithm.replace,
+//     );
+//   }
+
+//   Future<int> insertSdcQuestion(int sdcId, String question, String answer) async {
+//   Database db = await database;
+
+//   // Check if the sdc_id already exists in questions table using MAX
+//   int? maxSdcId = Sqflite.firstIntValue(await db.rawQuery(
+//     'SELECT MAX(sdc_id) FROM questions WHERE sdc_id = ?', [sdcId]
+//   ));
+//   if (maxSdcId != null) {
+//     await deleteQuestionsBySdcId(sdcId);
+//   }
+
+//   return await db.insert('questions', {
+//     'sdc_id': sdcId,
+//     'question': question,
+//     'answer': answer,
+//   });
+// }
+
+//   Future<int> insertEatingHabit(int sdcId, String question, String answer) async {
+//   Database db = await database;
+
+//   // Check if the sdc_id already exists in eating_questions table using MAX
+//   int? maxSdcId = Sqflite.firstIntValue(await db.rawQuery(
+//     'SELECT MAX(sdc_id) FROM eating_questions WHERE sdc_id = ?', [sdcId]
+//   ));
+//   if (maxSdcId != null) {
+//     await deleteEatingQuestionsBySdcId(sdcId);
+//   }
+
+//   return await db.insert('eating_questions', {
+//     'sdc_id': sdcId,
+//     'question': question,
+//     'answer': answer,
+//   });
+// }
+
+
+//   Future<int> insertRemainingTableQuestion(int sdcId, String question, String answer) async {
+//   Database db = await database;
+
+//   // Check if the sdc_id already exists in remaining_table_questions table using MAX
+//   int? maxSdcId = Sqflite.firstIntValue(await db.rawQuery(
+//     'SELECT MAX(sdc_id) FROM remaining_table_questions WHERE sdc_id = ?', [sdcId]
+//   ));
+//   if (maxSdcId != null) {
+//     await deleteRemainingTableQuestionsBySdcId(sdcId);
+//   }
+
+//   return await db.insert('remaining_table_questions', {
+//     'sdc_id': sdcId,
+//     'question': question,
+//     'answer': answer,
+//   });
+// }
+Future<int> insertSdcModel(SdcModel sdcModel) async {
     Database db = await database;
     return await db.insert(
       'student',
@@ -111,12 +184,43 @@ class DatabaseHelper {
       'answer': answer,
     });
   }
+
   Future<void> deleteStudentById(int id) async {
     final db = await database;
     await db.delete(
       'student',
       where: 'id = ?',
       whereArgs: [id],
+    );
+    await deleteQuestionsBySdcId(id);
+    await deleteEatingQuestionsBySdcId(id);
+    await deleteRemainingTableQuestionsBySdcId(id);
+  }
+
+  Future<void> deleteQuestionsBySdcId(int sdcId) async {
+    final db = await database;
+    await db.delete(
+      'questions',
+      where: 'sdc_id = ?',
+      whereArgs: [sdcId],
+    );
+  }
+
+  Future<void> deleteEatingQuestionsBySdcId(int sdcId) async {
+    final db = await database;
+    await db.delete(
+      'eating_questions',
+      where: 'sdc_id = ?',
+      whereArgs: [sdcId],
+    );
+  }
+
+  Future<void> deleteRemainingTableQuestionsBySdcId(int sdcId) async {
+    final db = await database;
+    await db.delete(
+      'remaining_table_questions',
+      where: 'sdc_id = ?',
+      whereArgs: [sdcId],
     );
   }
 
@@ -127,7 +231,9 @@ class DatabaseHelper {
 
   Future<int> getSdcCount() async {
     final db = await database;
-    return Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM student')) ?? 0;
+    return Sqflite.firstIntValue(
+            await db.rawQuery('SELECT COUNT(*) FROM student')) ??
+        0;
   }
 
   Future<int> getLatestSdcId() async {
@@ -198,14 +304,27 @@ class DatabaseHelper {
       }
     }
 
-    // Get the external storage directory (Downloads directory on Android)
-    Directory? downloadsDirectory = await getExternalStorageDirectory();
-    if (downloadsDirectory != null) {
-      String filePath = '${downloadsDirectory.path}/sdc_database.xlsx';
+    // Get the appropriate directory for saving the file
+    Directory? directory;
+    try {
+      if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        directory = Directory('/storage/emulated/0/Download');
+        if (!await directory.exists()) {
+          directory = await getExternalStorageDirectory();
+        }
+      }
+    } catch (err) {
+      debugPrint("Cannot get download folder path: $err");
+    }
+
+    if (directory != null) {
+      String filePath = '${directory.path}/sdc_database.xlsx';
       List<int>? fileBytes = excel.save();
       if (fileBytes != null) {
         await File(filePath).writeAsBytes(fileBytes);
-        debugPrint('Database exported to Excel at $filePath');
+        debugPrint('Database e  xported to Excel at $filePath');
       } else {
         debugPrint('Failed to save Excel file.');
       }

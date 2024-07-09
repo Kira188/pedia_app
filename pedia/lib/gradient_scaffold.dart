@@ -8,7 +8,7 @@ class GradientScaffold extends StatelessWidget {
   const GradientScaffold({
     super.key,
     required this.body,
-    this.showBackButton = true,
+    this.showBackButton = false,
     this.appBarText = "Pedia Predict",
   });
 

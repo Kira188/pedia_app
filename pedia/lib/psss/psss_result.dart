@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/home_page.dart';
 import 'package:pedia/psss/psss_habits.dart';
 import 'package:pedia/database_helper.dart';
@@ -36,40 +37,43 @@ class PsssResult extends StatelessWidget {
         resultTitle = 'Result';
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(resultTitle),
-      ),
+    return GradientScaffold(
+      appBarText: resultTitle,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Your score is: $score', 
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Center(
+              child: Text(
+                'Your score is: $score', 
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 40),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      if (habitType == 0) {
-                        return PsssHabits(habitType: 1, dbHelper: dbHelper);
-                      } else if (habitType == 1) {
-                        return QuestionsScreen(startIndex: 15, endIndex: 17, dbHelper: dbHelper);
-                      } else if (habitType == 2) {
-                        return QuestionsScreen(startIndex: 18, endIndex: 19, dbHelper: dbHelper);
-                      } else {
-                        return HomePage(dbHelper: dbHelper);
-                      }
-                    },
-                  ),
-                );
-              },
-              icon: const Icon(Icons.arrow_forward),
-              label: const Text('Next'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        if (habitType == 0) {
+                          return PsssHabits(habitType: 1, dbHelper: dbHelper);
+                        } else if (habitType == 1) {
+                          return QuestionsScreen(startIndex: 15, endIndex: 17, dbHelper: dbHelper);
+                        } else if (habitType == 2) {
+                          return QuestionsScreen(startIndex: 18, endIndex: 19, dbHelper: dbHelper);
+                        } else {
+                          return HomePage(dbHelper: dbHelper);
+                        }
+                      },
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.arrow_forward),
+                label: const Text('Next'),
+              ),
             ),
           ],
         ),

@@ -114,7 +114,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               padding: const EdgeInsets.only(left: 16.0, top: 8.0),
               child: buildQuestion(subQuestion, questionKey),
             );
-          }).toList(),
+          }),
       ],
     );
   }

@@ -111,6 +111,14 @@ class DatabaseHelper {
       'answer': answer,
     });
   }
+  Future<void> deleteStudentById(int id) async {
+    final db = await database;
+    await db.delete(
+      'student',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 
   Future<List<Map<String, dynamic>>> getTableData(String tableName) async {
     final db = await database;

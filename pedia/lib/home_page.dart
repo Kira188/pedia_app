@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pedia/delete_student.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/sdc/sdc_page.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 
 class HomePage extends StatelessWidget {
   final DatabaseHelper dbHelper;

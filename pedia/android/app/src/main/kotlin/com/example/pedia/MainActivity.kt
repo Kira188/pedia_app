@@ -1,4 +1,4 @@
-package com.example.pedia
+package com.example.pedia_predict
 
 import io.flutter.embedding.android.FlutterActivity
 

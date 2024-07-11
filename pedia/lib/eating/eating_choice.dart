@@ -71,11 +71,14 @@ class _EatingChoiceState extends State<EatingChoice> {
                 style: const TextStyle(color: Colors.red),
               ),
             ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, _selectedFrequencies);
-            },
-            child: const Text('Done'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, _selectedFrequencies);
+              },
+              child: const Text('Done'),
+            ),
           ),
         ],
       ),

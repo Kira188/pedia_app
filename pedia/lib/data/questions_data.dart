@@ -2,6 +2,10 @@ import 'package:pedia/models/questions_model.dart';
 
 final List<QuizQuestion> questions = [
   const QuizQuestion(
+    text: 'Do you stay in hostel?',
+    dropdownAnswers: ['Yes', 'No'],
+  ),
+  const QuizQuestion(
     text: 'Name of the Father:',
     textAnswer: true,
   ),

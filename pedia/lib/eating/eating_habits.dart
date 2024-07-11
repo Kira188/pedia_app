@@ -3,7 +3,7 @@ import 'package:pedia/eating/eating_choice.dart';
 import 'package:pedia/models/eating_model.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/eating/eating_result.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 import 'package:pedia/data/eating_options.dart';
 
 class EatingHabits extends StatefulWidget {

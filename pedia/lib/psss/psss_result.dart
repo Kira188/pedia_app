@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/gradient_scaffold.dart';
-import 'package:pedia/home_page.dart';
+import 'package:pedia/image_question.dart';
 import 'package:pedia/psss/psss_habits.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 import 'package:pedia/questions_screen.dart';
 
 class PsssResult extends StatelessWidget {
@@ -45,7 +45,7 @@ class PsssResult extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Your score is: $score', 
+                'Your score is: $score',
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
@@ -54,22 +54,33 @@ class PsssResult extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        if (habitType == 0) {
-                          return PsssHabits(habitType: 1, dbHelper: dbHelper);
-                        } else if (habitType == 1) {
-                          return QuestionsScreen(startIndex: 15, endIndex: 17, dbHelper: dbHelper);
-                        } else if (habitType == 2) {
-                          return QuestionsScreen(startIndex: 18, endIndex: 19, dbHelper: dbHelper);
-                        } else {
-                          return HomePage(dbHelper: dbHelper);
-                        }
-                      },
-                    ),
-                  );
+                  if (habitType == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PsssHabits(habitType: 1, dbHelper: dbHelper),
+                      ),
+                    );
+                  } else if (habitType == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuestionsScreen(startIndex: 16, endIndex: 18, dbHelper: dbHelper),
+                      ),
+                    );
+                  } else if (habitType == 2) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageQuestion(dbHelper: dbHelper),
+                      ),
+                    );
+                  } else {
+                    Navigator.popUntil(
+                      context,
+                      (route) => route.isFirst,
+                    );
+                  }
                 },
                 icon: const Icon(Icons.arrow_forward),
                 label: const Text('Next'),

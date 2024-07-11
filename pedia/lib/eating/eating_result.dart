@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/gradient_scaffold.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 import 'package:pedia/questions_screen.dart';
 
 class EatingResult extends StatelessWidget {
@@ -33,8 +33,8 @@ class EatingResult extends StatelessWidget {
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return QuestionsScreen(
-                    startIndex: 11,
-                    endIndex: 14,
+                    startIndex: 12,
+                    endIndex: 15,
                     dbHelper: dbHelper,
                   );
                 }));

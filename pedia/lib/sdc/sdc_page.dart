@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/models/sdc_model.dart';
 import 'package:pedia/data/sdc_data.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 import 'package:pedia/questions_screen.dart';
 
 class SdcPage extends StatefulWidget {
@@ -143,7 +143,7 @@ class _SdcPageState extends State<SdcPage> {
                 Navigator.of(context).pop();
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return QuestionsScreen(
-                    startIndex: 0, endIndex: 10, dbHelper: widget.dbHelper);
+                    startIndex: 0, endIndex: 11, dbHelper: widget.dbHelper);
                 }));
               },
             ),

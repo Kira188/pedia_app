@@ -3,7 +3,7 @@ import 'package:pedia/models/psss_data.dart';
 import 'package:pedia/psss/psss_choice.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/psss/psss_result.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 
 class PsssHabits extends StatefulWidget {
   final int habitType;

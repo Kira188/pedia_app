@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/gradient_scaffold.dart';
-import 'database_helper.dart';
+import 'utils/database_helper.dart';
 
 class DeleteStudent extends StatefulWidget {
   const DeleteStudent({super.key, required this.dbHelper});

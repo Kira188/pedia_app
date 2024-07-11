@@ -3,7 +3,7 @@ import 'package:pedia/data/questions_data.dart';
 import 'package:pedia/home_page.dart';
 import 'package:pedia/models/questions_model.dart';
 import 'package:pedia/gradient_scaffold.dart';
-import 'package:pedia/database_helper.dart';
+import 'package:pedia/utils/database_helper.dart';
 import 'package:pedia/eating/eating_habits.dart';
 import 'package:pedia/psss/psss_habits.dart';
 
@@ -74,17 +74,18 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               TextButton(
                 child: const Text('OK'),
                 onPressed: () {
+                  
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
                         if (widget.startIndex == 0) {
                           return EatingHabits(dbHelper: widget.dbHelper);
-                        } else if (widget.startIndex == 11) {
+                        } else if (widget.startIndex == 12) {
                           return PsssHabits(habitType: 0, dbHelper: widget.dbHelper);
-                        } else if (widget.startIndex == 15) {
+                        } else if (widget.startIndex == 16) {
                           return PsssHabits(habitType: 2, dbHelper: widget.dbHelper);
-                        } else if (widget.startIndex == 18) {
+                        } else if (widget.startIndex == 19) {
                           return PsssHabits(habitType: 3, dbHelper: widget.dbHelper);
                         } else {
                           return HomePage(dbHelper: widget.dbHelper);

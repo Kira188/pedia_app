@@ -47,9 +47,9 @@ class PhysicalData {
       if (frequency == 'Never') {
         score += 0;
       } else if (frequency == '1 day') {
-        score += 1;
+        score += 9;
       } else if (frequency == '2 days') {
-        score += 2;
+        score += 18;
       } else if (frequency == '3 days') {
         score += 3;
       } else if (frequency == '4 days') {

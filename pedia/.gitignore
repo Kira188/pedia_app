@@ -8,9 +8,9 @@
 .buildlog/
 .history
 .svn/
-/Users/kiranseenivasan/Documents/Flutter Dev/pedia/lib/firebase_options.dart
+/lib/firebase_options.dart
 migrate_working_dir/
-/Users/kiranseenivasan/Documents/Flutter Dev/pedia/ios/Runner/GoogleService-Info.plist
+/ios/Runner/GoogleService-Info.plist
 
 # IntelliJ related
 *.iml

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/utils/database_helper.dart';
 import 'package:pedia/auth/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatelessWidget {
   final DatabaseHelper dbHelper;
@@ -10,6 +11,30 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController confirmPasswordController = TextEditingController();
+
+    Future<void> signUp() async {
+      if (passwordController.text == confirmPasswordController.text) {
+        try {
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
+          // Automatically navigates to HomePage via AuthWrapper
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to sign up: ${e.toString()}')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Passwords do not match')),
+        );
+      }
+    }
+
     return GradientScaffold(
       appBarText: "Pedia Predict",
       body: SafeArea(
@@ -32,8 +57,9 @@ class SignUpPage extends StatelessWidget {
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               const SizedBox(height: 30),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
                   labelText: "Email or Phone Number",
                   border: OutlineInputBorder(),
                 ),
@@ -53,18 +79,20 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
+              TextField(
+                controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Password",
                   border: OutlineInputBorder(),
                   suffixIcon: Icon(Icons.visibility),
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
+              TextField(
+                controller: confirmPasswordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Confirm Password",
                   border: OutlineInputBorder(),
                   suffixIcon: Icon(Icons.visibility),
@@ -73,12 +101,9 @@ class SignUpPage extends StatelessWidget {
               const SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Sign up logic
-                  },
+                  onPressed: signUp,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   ),
                   child: const Text("Sign Up"),
                 ),
@@ -90,7 +115,8 @@ class SignUpPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => LoginPage(dbHelper: dbHelper)),
+                        builder: (context) => LoginPage(dbHelper: dbHelper),
+                      ),
                     );
                   },
                   child: const Text(

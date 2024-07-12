@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pedia/gradient_scaffold.dart';
-import 'package:pedia/home_page.dart';
+//import 'package:pedia/home_page.dart';
 import 'package:pedia/auth/signup_page.dart';
 import 'package:pedia/auth/forgot_password_page.dart';
 import 'package:pedia/utils/database_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.dbHelper});
@@ -21,16 +22,19 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState?.validate() ?? false) {
-      debugPrint(_usernameController.text);
-      debugPrint(_passwordController.text);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(dbHelper: widget.dbHelper),
-        ),
-      );
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _usernameController.text,
+          password: _passwordController.text,
+        );
+        // Automatically navigates to HomePage via AuthWrapper
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to sign in: ${e.toString()}')),
+        );
+      }
     }
   }
 

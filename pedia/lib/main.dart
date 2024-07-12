@@ -1,33 +1,62 @@
-import 'package:flutter/material.dart';
-import 'package:pedia/home_page.dart';
-import 'package:pedia/utils/database_helper.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:pedia/firebase_options.dart';
+// import 'package:flutter/material.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:pedia/home_page.dart';
+// import 'package:pedia/auth/login_page.dart';
+// import 'package:pedia/utils/database_helper.dart';
+// import 'package:pedia/firebase_options.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
-  runApp(const MyApp());
-}
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(const MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final DatabaseHelper dbHelper = DatabaseHelper();
+//   @override
+//   Widget build(BuildContext context) {
+//     final DatabaseHelper dbHelper = DatabaseHelper();
 
-    return MaterialApp(
-      title: 'Pedia Predict',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(dbHelper: dbHelper),
-    );
-  }
-}
+//     return MaterialApp(
+//       title: 'Pedia Predict',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: AuthWrapper(dbHelper: dbHelper),
+//     );
+//   }
+// }
+
+// class AuthWrapper extends StatelessWidget {
+//   final DatabaseHelper dbHelper;
+
+//   const AuthWrapper({super.key, required this.dbHelper});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder<User?>(
+//       stream: FirebaseAuth.instance.authStateChanges(),
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.active) {
+//           User? user = snapshot.data;
+//           if (user == null) {
+//             return LoginPage(dbHelper: dbHelper);
+//           } else {
+//             return HomePage(dbHelper: dbHelper);
+//           }
+//         } else {
+//           return const Center(child: CircularProgressIndicator());
+//         }
+//       },
+//     );
+//   }
+// }
+
+
 
 // import 'package:flutter/material.dart';
 // import 'package:pedia/image_question.dart';
@@ -50,3 +79,63 @@ class MyApp extends StatelessWidget {
 //     );
 //   }
 // }
+
+
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pedia/home_page.dart';
+import 'package:pedia/auth/auth_page.dart';
+import 'package:pedia/utils/database_helper.dart';
+import 'package:pedia/firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final DatabaseHelper dbHelper = DatabaseHelper();
+
+    return MaterialApp(
+      title: 'Pedia Predict',
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+      ),
+      home: AuthWrapper(dbHelper: dbHelper),
+    );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  final DatabaseHelper dbHelper;
+
+  const AuthWrapper({super.key, required this.dbHelper});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          User? user = snapshot.data;
+          if (user == null) {
+            return const AuthPage();
+          } else {
+            return HomePage(dbHelper: dbHelper);
+          }
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+}
+

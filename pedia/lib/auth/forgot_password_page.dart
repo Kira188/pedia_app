@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pedia/auth/signup_page.dart';
 import 'package:pedia/gradient_scaffold.dart';
 import 'package:pedia/utils/database_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   final DatabaseHelper dbHelper;
@@ -10,6 +11,23 @@ class ForgotPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
+    Future<void> resetPassword() async {
+      try {
+        await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: emailController.text,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Password reset email sent')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to reset password: ${e.toString()}')),
+        );
+      }
+    }
+
     return GradientScaffold(
       appBarText: "Pedia Predict",
       body: SafeArea(
@@ -32,8 +50,9 @@ class ForgotPasswordPage extends StatelessWidget {
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               const SizedBox(height: 30),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(
                   labelText: "Username, Email or Phone Number",
                   border: OutlineInputBorder(),
                 ),
@@ -41,12 +60,9 @@ class ForgotPasswordPage extends StatelessWidget {
               const SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Forgot password logic
-                  },
+                  onPressed: resetPassword,
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   ),
                   child: const Text("Forgot Password"),
                 ),
@@ -58,7 +74,8 @@ class ForgotPasswordPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SignUpPage(dbHelper: dbHelper)),
+                        builder: (context) => SignUpPage(dbHelper: dbHelper),
+                      ),
                     );
                   },
                   child: const Text(

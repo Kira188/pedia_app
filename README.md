@@ -1,5 +1,5 @@
 # This Repo has All the Files relating to the Child Obesity App.
-## For now the The Basic Layout and core functionalities is Being Created. 
+## Non Functional Requirements should be met 
 
 ### Stuff to do 
 

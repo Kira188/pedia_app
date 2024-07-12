@@ -3,7 +3,9 @@
 
 ### Stuff to do 
 
-
-
-- Create a Login Page with firebase 
-More front end and non functional Reequirements
+- Test App
+- Upgrade Stuff
+- Fix Bugs if there
+- Release The App
+- Make SRS
+- Someday Do ML on this

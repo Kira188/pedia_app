@@ -110,6 +110,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.amber,
       ),
       home: AuthWrapper(dbHelper: dbHelper),
+      routes: {
+        '/login': (context) => const AuthPage(),
+        '/home': (context) => HomePage(dbHelper: dbHelper),
+      },
     );
   }
 }
@@ -124,6 +128,9 @@ class AuthWrapper extends StatelessWidget {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
+        debugPrint("AuthWrapper: Connection state - ${snapshot.connectionState}");
+        debugPrint("AuthWrapper: User - ${snapshot.data}");
+
         if (snapshot.connectionState == ConnectionState.active) {
           User? user = snapshot.data;
           if (user == null) {
@@ -138,4 +145,3 @@ class AuthWrapper extends StatelessWidget {
     );
   }
 }
-

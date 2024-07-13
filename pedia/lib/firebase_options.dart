@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -54,10 +51,19 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAQalP2WYe8SQsykquungQz9G8yufvbUk4',
-    appId: '1:938935710446:android:b116f9942d6f55e33d39ff',
+    appId: '1:938935710446:android:4e2f7775537067733d39ff',
     messagingSenderId: '938935710446',
     projectId: 'flutter-pedia',
     storageBucket: 'flutter-pedia.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyB_Nwan7p9G8J2Uk5TWdC98a0AxA3_VKT8',
+    appId: '1:938935710446:ios:86a95568c09fa1c93d39ff',
+    messagingSenderId: '938935710446',
+    projectId: 'flutter-pedia',
+    storageBucket: 'flutter-pedia.appspot.com',
+    iosBundleId: 'com.example.pedia',
   );
 
 }

@@ -48,6 +48,14 @@ class _AuthPageState extends State<AuthPage> {
       } else if (_isLogin) {
         await _firebase.signInWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
+        debugPrint("Login successful");
+
+        // Delay to ensure Firebase updates the auth state
+        await Future.delayed(const Duration(seconds: 1));
+
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
       } else {
         final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
@@ -59,6 +67,14 @@ class _AuthPageState extends State<AuthPage> {
           'username': _enteredUsername,
           'email': _enteredEmail,
         });
+        debugPrint("Sign up successful");
+
+        // Delay to ensure Firebase updates the auth state
+        await Future.delayed(const Duration(seconds: 1));
+
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/home');
+        }
       }
     } on FirebaseAuthException catch (error) {
       if (mounted) {

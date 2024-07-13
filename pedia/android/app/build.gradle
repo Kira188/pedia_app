@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.example.pedia_predict"
+    namespace = "com.example.pedia"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.pedia_predict"
+        applicationId = "com.example.pedia"
         // Override minSdkVersion to 23
         minSdkVersion 23
         targetSdk = flutter.targetSdkVersion
